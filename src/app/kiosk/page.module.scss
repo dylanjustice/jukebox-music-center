@@ -93,6 +93,23 @@
   }
 }
 
+.volumeRow {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(60vw, 400px);
+}
+
+.volumeIcon {
+  color: #b3b3b3;
+  flex-shrink: 0;
+}
+
+.volumeSlider {
+  flex: 1;
+}
+
 .idle {
   color: #535353;
   font-size: 1.1rem;

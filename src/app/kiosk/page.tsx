@@ -3,11 +3,14 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import IconButton from "@mui/material/IconButton";
+import Slider from "@mui/material/Slider";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import VolumeDownIcon from "@mui/icons-material/VolumeDown";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import styles from "./page.module.scss";
 
 interface Track {
@@ -17,6 +20,7 @@ interface Track {
   album: string;
   albumArt: string | null;
   isPlaying: boolean;
+  volumePercent: number | null;
   durationMs: number;
   progressMs: number;
 }
@@ -27,7 +31,9 @@ const REFRESH_BUFFER_MS = 60_000;
 export default function KioskPage() {
   const [track, setTrack] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState<number>(50);
   const [loading, setLoading] = useState(true);
+  const volumeDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const refreshTokenIfNeeded = useCallback(async () => {
@@ -55,6 +61,7 @@ export default function KioskPage() {
     } else {
       setTrack(data);
       setIsPlaying(data.isPlaying);
+      if (data.volumePercent !== null) setVolume(data.volumePercent);
     }
     setLoading(false);
   }, [refreshTokenIfNeeded]);
@@ -82,6 +89,19 @@ export default function KioskPage() {
   const handlePlayPause = () => sendAction(isPlaying ? "pause" : "play");
   const handleNext = () => sendAction("next");
   const handlePrevious = () => sendAction("previous");
+
+  const handleVolumeChange = (_: Event, value: number | number[]) => {
+    const pct = Array.isArray(value) ? value[0] : value;
+    setVolume(pct);
+    if (volumeDebounceRef.current) clearTimeout(volumeDebounceRef.current);
+    volumeDebounceRef.current = setTimeout(() => {
+      fetch("/api/player", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "volume", value: pct }),
+      });
+    }, 200);
+  };
 
   if (loading) {
     return (
@@ -146,6 +166,29 @@ export default function KioskPage() {
         >
           <SkipNextIcon />
         </IconButton>
+      </div>
+
+      <div className={styles.volumeRow}>
+        <VolumeDownIcon className={styles.volumeIcon} />
+        <Slider
+          value={volume}
+          onChange={handleVolumeChange}
+          min={0}
+          max={100}
+          aria-label="Volume"
+          className={styles.volumeSlider}
+          sx={{
+            color: "#1db954",
+            "& .MuiSlider-thumb": {
+              width: 28,
+              height: 28,
+            },
+            "& .MuiSlider-rail": {
+              opacity: 0.3,
+            },
+          }}
+        />
+        <VolumeUpIcon className={styles.volumeIcon} />
       </div>
     </div>
   );

@@ -41,6 +41,7 @@ export async function GET() {
     album: data.item.album.name,
     albumArt: data.item.album.images[0]?.url ?? null,
     isPlaying: data.is_playing,
+    volumePercent: data.device?.volume_percent ?? null,
     durationMs: data.item.duration_ms,
     progressMs: data.progress_ms,
   };

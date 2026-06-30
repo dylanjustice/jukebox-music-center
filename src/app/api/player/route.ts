@@ -27,7 +27,8 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "unauthenticated" }, { status: 401 });
   }
 
-  const { action } = await request.json();
+  const body = await request.json();
+  const { action } = body;
 
   let res: Response;
   switch (action) {
@@ -43,6 +44,15 @@ export async function POST(request: NextRequest) {
     case "previous":
       res = await spotifyRequest(accessToken, "/previous", "POST");
       break;
+    case "volume": {
+      const pct = Math.min(100, Math.max(0, parseInt(body.value, 10)));
+      res = await spotifyRequest(
+        accessToken,
+        `/volume?volume_percent=${pct}`,
+        "PUT",
+      );
+      break;
+    }
     default:
       return Response.json({ error: "unknown_action" }, { status: 400 });
   }
