@@ -9,3 +9,6 @@ export const COOKIE_ACCESS_TOKEN = "spotify_access_token";
 export const COOKIE_REFRESH_TOKEN = "spotify_refresh_token";
 export const COOKIE_EXPIRES_AT = "spotify_expires_at";
 export const COOKIE_AUTH_STATE = "spotify_auth_state";
+export const COOKIE_REGISTER = "spotify_register";
+
+export const SPOTIFY_ME_URL = `${SPOTIFY_API_URL}/me`;

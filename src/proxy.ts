@@ -4,7 +4,7 @@ import { COOKIE_ACCESS_TOKEN, COOKIE_EXPIRES_AT } from "@/lib/spotify";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/api/") || pathname === "/login") {
+  if (pathname.startsWith("/api/") || pathname === "/profiles") {
     return NextResponse.next();
   }
 
@@ -15,7 +15,7 @@ export function proxy(request: NextRequest) {
     accessToken && expiresAt && Date.now() < parseInt(expiresAt, 10);
 
   if (!isAuthenticated) {
-    return NextResponse.redirect(new URL("/api/auth/login", request.url));
+    return NextResponse.redirect(new URL("/profiles", request.url));
   }
 
   return NextResponse.next();

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import IconButton from "@mui/material/IconButton";
 import Slider from "@mui/material/Slider";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
@@ -41,6 +42,7 @@ export default function KioskPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState<number>(50);
   const [loading, setLoading] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const volumeDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -89,6 +91,12 @@ export default function KioskPage() {
   }, [refreshTokenIfNeeded]);
 
   useEffect(() => {
+    fetch("/api/me")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data?.avatarUrl) setAvatarUrl(data.avatarUrl) });
+  }, []);
+
+  useEffect(() => {
     fetchNowPlaying();
     pollRef.current = setInterval(fetchNowPlaying, POLL_INTERVAL);
     return () => {
@@ -135,6 +143,19 @@ export default function KioskPage() {
 
   return (
     <div className={styles.root}>
+      <button
+        className={styles.switchBtn}
+        onClick={() => { window.location.href = "/profiles"; }}
+        aria-label="Switch profile"
+      >
+        {avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={avatarUrl} alt="Profile" className={styles.switchAvatar} />
+        ) : (
+          <AccountCircleOutlinedIcon className={styles.switchIcon} />
+        )}
+      </button>
+
       <div className={styles.main}>
         <div className={styles.albumArtWrapper}>
           {track?.albumArt ? (

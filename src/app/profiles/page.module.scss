@@ -1,0 +1,82 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0a0a0a;
+  user-select: none;
+}
+
+.heading {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 300;
+  color: #ffffff;
+  margin-bottom: 56px;
+  letter-spacing: 0.02em;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  max-width: 800px;
+  padding: 0 32px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 16px;
+  transition: background-color 0.15s ease;
+
+  &:active {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.avatar {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #282828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarImg {
+  object-fit: cover;
+}
+
+.initials {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #b3b3b3;
+}
+
+.addAvatar {
+  border: 2px dashed #333333;
+  background-color: transparent;
+}
+
+.name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #b3b3b3;
+}
+
+.addName {
+  color: #535353;
+}

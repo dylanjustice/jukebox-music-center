@@ -177,6 +177,40 @@
   max-width: 140px;
 }
 
+.switchBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: opacity 0.15s ease;
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.switchAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+
+.switchIcon {
+  font-size: 52px !important;
+  color: #333333;
+}
+
 .idle {
   color: #535353;
   font-size: 1.1rem;
