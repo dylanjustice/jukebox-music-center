@@ -11,6 +11,7 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import { COOKIE_EXPIRES_AT } from "@/lib/spotify";
 import styles from "./page.module.scss";
 
 interface Track {
@@ -37,7 +38,9 @@ export default function KioskPage() {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const refreshTokenIfNeeded = useCallback(async () => {
-    const match = document.cookie.match(/spotify_expires_at=(\d+)/);
+    const match = document.cookie.match(
+      new RegExp(`${COOKIE_EXPIRES_AT}=(\\d+)`),
+    );
     if (!match) return;
     const expiresAt = parseInt(match[1], 10);
     if (Date.now() > expiresAt - REFRESH_BUFFER_MS) {

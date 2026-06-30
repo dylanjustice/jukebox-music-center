@@ -1,9 +1,14 @@
 import { cookies } from "next/headers";
-import { SPOTIFY_TOKEN_URL } from "@/lib/spotify";
+import {
+  SPOTIFY_TOKEN_URL,
+  COOKIE_ACCESS_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  COOKIE_EXPIRES_AT,
+} from "@/lib/spotify";
 
 export async function GET() {
   const cookieStore = await cookies();
-  const refreshToken = cookieStore.get("spotify_refresh_token")?.value;
+  const refreshToken = cookieStore.get(COOKIE_REFRESH_TOKEN)?.value;
 
   if (!refreshToken) {
     return Response.json({ error: "no_refresh_token" }, { status: 401 });
@@ -35,17 +40,17 @@ export async function GET() {
   const headers = new Headers();
   headers.append(
     "Set-Cookie",
-    `spotify_access_token=${tokens.access_token}; ${cookieOpts}; Max-Age=${tokens.expires_in}`,
+    `${COOKIE_ACCESS_TOKEN}=${tokens.access_token}; ${cookieOpts}; Max-Age=${tokens.expires_in}`,
   );
   headers.append(
     "Set-Cookie",
-    `spotify_expires_at=${expiresAt}; ${cookieOpts}; Max-Age=${tokens.expires_in}`,
+    `${COOKIE_EXPIRES_AT}=${expiresAt}; ${cookieOpts}; Max-Age=${tokens.expires_in}`,
   );
 
   if (tokens.refresh_token) {
     headers.append(
       "Set-Cookie",
-      `spotify_refresh_token=${tokens.refresh_token}; ${cookieOpts}; Max-Age=${60 * 60 * 24 * 30}`,
+      `${COOKIE_REFRESH_TOKEN}=${tokens.refresh_token}; ${cookieOpts}; Max-Age=${60 * 60 * 24 * 30}`,
     );
   }
 

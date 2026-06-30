@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { SPOTIFY_AUTH_URL } from "@/lib/spotify";
+import { SPOTIFY_AUTH_URL, COOKIE_AUTH_STATE } from "@/lib/spotify";
 
 const SCOPES = [
   "user-read-playback-state",
@@ -28,7 +28,7 @@ export function GET(request: NextRequest) {
   const headers = new Headers(response.headers);
   headers.set(
     "Set-Cookie",
-    `spotify_auth_state=${state}; HttpOnly; Path=/; SameSite=Lax; Max-Age=600`,
+    `${COOKIE_AUTH_STATE}=${state}; HttpOnly; Path=/; SameSite=Lax; Max-Age=600`,
   );
 
   return new Response(null, { status: 302, headers });

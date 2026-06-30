@@ -1,11 +1,11 @@
 import { cookies } from "next/headers";
-import { SPOTIFY_PLAYER_URL } from "@/lib/spotify";
+import { SPOTIFY_PLAYER_URL, COOKIE_ACCESS_TOKEN } from "@/lib/spotify";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get("spotify_access_token")?.value;
+  const accessToken = cookieStore.get(COOKIE_ACCESS_TOKEN)?.value;
 
   if (!accessToken) {
     return Response.json({ error: "unauthenticated" }, { status: 401 });

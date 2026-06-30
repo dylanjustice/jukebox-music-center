@@ -1,6 +1,12 @@
 import { type NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import { SPOTIFY_TOKEN_URL } from "@/lib/spotify";
+import {
+  SPOTIFY_TOKEN_URL,
+  COOKIE_ACCESS_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  COOKIE_EXPIRES_AT,
+  COOKIE_AUTH_STATE,
+} from "@/lib/spotify";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -13,7 +19,7 @@ export async function GET(request: NextRequest) {
   }
 
   const cookieStore = await cookies();
-  const savedState = cookieStore.get("spotify_auth_state")?.value;
+  const savedState = cookieStore.get(COOKIE_AUTH_STATE)?.value;
 
   if (!savedState || savedState !== state) {
     return Response.redirect(new URL("/api/auth/login", request.url));
@@ -47,19 +53,19 @@ export async function GET(request: NextRequest) {
   const headers = new Headers();
   headers.append(
     "Set-Cookie",
-    `spotify_access_token=${tokens.access_token}; ${cookieOpts}; Max-Age=${tokens.expires_in}`,
+    `${COOKIE_ACCESS_TOKEN}=${tokens.access_token}; ${cookieOpts}; Max-Age=${tokens.expires_in}`,
   );
   headers.append(
     "Set-Cookie",
-    `spotify_refresh_token=${tokens.refresh_token}; ${cookieOpts}; Max-Age=${60 * 60 * 24 * 30}`,
+    `${COOKIE_REFRESH_TOKEN}=${tokens.refresh_token}; ${cookieOpts}; Max-Age=${60 * 60 * 24 * 30}`,
   );
   headers.append(
     "Set-Cookie",
-    `spotify_expires_at=${expiresAt}; ${cookieOpts}; Max-Age=${tokens.expires_in}`,
+    `${COOKIE_EXPIRES_AT}=${expiresAt}; ${cookieOpts}; Max-Age=${tokens.expires_in}`,
   );
   headers.append(
     "Set-Cookie",
-    `spotify_auth_state=; HttpOnly; Path=/; Max-Age=0`,
+    `${COOKIE_AUTH_STATE}=; HttpOnly; Path=/; Max-Age=0`,
   );
   headers.set("Location", "/kiosk");
 
