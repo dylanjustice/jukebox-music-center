@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { SPOTIFY_PLAYER_URL } from "@/lib/spotify";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,7 @@ export async function GET() {
   }
 
   const response = await fetch(
-    "https://api.spotify.com/v1/me/player/currently-playing",
+    `${SPOTIFY_PLAYER_URL}/currently-playing`,
     {
       headers: { Authorization: `Bearer ${accessToken}` },
     },

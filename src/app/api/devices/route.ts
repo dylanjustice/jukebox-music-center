@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { SPOTIFY_PLAYER_URL } from "@/lib/spotify";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ export async function GET() {
     return Response.json({ error: "unauthenticated" }, { status: 401 });
   }
 
-  const res = await fetch("https://api.spotify.com/v1/me/player/devices", {
+  const res = await fetch(`${SPOTIFY_PLAYER_URL}/devices`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 

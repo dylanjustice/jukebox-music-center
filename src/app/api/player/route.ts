@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { type NextRequest } from "next/server";
+import { SPOTIFY_PLAYER_URL } from "@/lib/spotify";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,7 @@ async function spotifyRequest(
   method: string,
   body?: object,
 ) {
-  return fetch(`https://api.spotify.com/v1/me/player${endpoint}`, {
+  return fetch(`${SPOTIFY_PLAYER_URL}${endpoint}`, {
     method,
     headers: {
       Authorization: `Bearer ${accessToken}`,

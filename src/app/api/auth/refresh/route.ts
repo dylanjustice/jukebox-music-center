@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { SPOTIFY_TOKEN_URL } from "@/lib/spotify";
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -11,7 +12,7 @@ export async function GET() {
   const clientId = process.env.SPOTIFY_CLIENT_ID!;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
 
-  const tokenResponse = await fetch("https://accounts.spotify.com/api/token", {
+  const tokenResponse = await fetch(SPOTIFY_TOKEN_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

@@ -1,5 +1,6 @@
 import { type NextRequest } from "next/server";
 import { cookies } from "next/headers";
+import { SPOTIFY_TOKEN_URL } from "@/lib/spotify";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
   const redirectUri = process.env.SPOTIFY_REDIRECT_URI!;
 
-  const tokenResponse = await fetch("https://accounts.spotify.com/api/token", {
+  const tokenResponse = await fetch(SPOTIFY_TOKEN_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

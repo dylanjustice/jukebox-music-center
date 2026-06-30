@@ -1,4 +1,5 @@
 import { type NextRequest } from "next/server";
+import { SPOTIFY_AUTH_URL } from "@/lib/spotify";
 
 const SCOPES = [
   "user-read-playback-state",
@@ -20,7 +21,7 @@ export function GET(request: NextRequest) {
   });
 
   const response = Response.redirect(
-    `https://accounts.spotify.com/authorize?${params.toString()}`,
+    `${SPOTIFY_AUTH_URL}?${params.toString()}`,
     302,
   );
 
